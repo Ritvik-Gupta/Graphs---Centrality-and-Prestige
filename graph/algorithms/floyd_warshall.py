@@ -1,9 +1,9 @@
-from graph.ShortestPaths import ShortestPaths
+from graph.shortest_paths import ShortestPaths
 
 PathsAdjacencyMatrix = dict[str, dict[str, ShortestPaths]]
 
 
-from graph.Graph import Graph
+from graph.graph import Graph
 
 
 def floyd_warshall_algorithm(graph: Graph):

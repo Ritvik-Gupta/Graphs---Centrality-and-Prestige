@@ -1,5 +1,6 @@
 from graph.algorithms.floyd_warshall import PathsAdjacencyMatrix
-from graph.GraphNode import GraphNode
+from graph.errors import NodesWithSameID, NoSuchNodeWithID
+from graph.graph_node import GraphNode
 
 
 class Graph:
@@ -8,10 +9,15 @@ class Graph:
 
     def add_node(self, node_id: str):
         if node_id in self.nodes:
-            raise
+            raise NodesWithSameID(node_id)
         self.nodes[node_id] = GraphNode(node_id)
 
     def connect_nodes(self, a_node_id: str, b_node_id: str):
+        if a_node_id not in self.nodes:
+            raise NoSuchNodeWithID(a_node_id)
+        if b_node_id not in self.nodes:
+            raise NoSuchNodeWithID(b_node_id)
+
         self.nodes[a_node_id].add_neighbour(self.nodes[b_node_id])
         self.nodes[b_node_id].add_neighbour(self.nodes[a_node_id])
 
