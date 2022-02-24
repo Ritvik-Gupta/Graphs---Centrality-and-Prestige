@@ -18,6 +18,10 @@ def parse_file_for_graph(filename: str) -> Graph:
             graph.add_node(node_id)
 
         for line in file:
+            line = line.strip()
+            if len(line) == 0:
+                continue
+
             try:
                 [a_id, sep, b_id] = line.split()
             except ValueError:

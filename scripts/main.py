@@ -1,19 +1,14 @@
-import sys
-
 import pandas as pd
 from graph.algorithms.floyd_warshall import floyd_warshall_algorithm
 from tabulate import tabulate
 from utils.graph_parser import parse_file_for_graph
 
 
-def main(args: list[str]):
+def main():
     print("Name :                   Ritvik Gupta")
     print("Registration Number :    19BCE0397", end="\n\n")
 
-    if len(args) == 0:
-        raise FileNotFoundError("Filename for Graph not specified")
-
-    graph = parse_file_for_graph(args[0])
+    graph = parse_file_for_graph(input("Enter a Filename for Graph:\t"))
 
     shortest_paths_matrix = floyd_warshall_algorithm(graph)
 
@@ -69,4 +64,4 @@ def main(args: list[str]):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()

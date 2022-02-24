@@ -11,6 +11,7 @@ fig = px.scatter(
     log_y=True,
     size=df["Value"] + 1,
     color="Metric",
+    symbol="Metric",
     labels={"Node ID": "Unique ID for Node", "Value": "Centrality or Prestige Metric"},
 )
 fig.show()
