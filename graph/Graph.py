@@ -1,11 +1,11 @@
+import sys
+from functools import reduce
 from itertools import count
 
 from tabulate import tabulate
 
+from graph.algorithms.floyd_warshall import PathsAdjacencyMatrix
 from graph.GraphNode import GraphNode
-from graph.ShortestPaths import ShortestPaths
-
-PathsAdjacencyMatrix = dict[str, dict[str, ShortestPaths]]
 
 
 class Graph:
@@ -24,54 +24,18 @@ class Graph:
         for node in self.nodes.values():
             node.store["Degree Centrality"] = len(node.neighbors) / normalization_factor
 
-    def floyd_warshall_algorithm(self) -> PathsAdjacencyMatrix:
-        ids = list(self.nodes.keys())
-        num_nodes = len(self.nodes)
-        adjacency_list: PathsAdjacencyMatrix = {}
-
-        for node_id in ids:
-            row: dict[str, ShortestPaths] = {}
-            adjacency_list[node_id] = row
-
-            for neighbor_id in ids:
-                shortest_path = ShortestPaths()
-                if node_id == neighbor_id:
-                    shortest_path.check_add([])
-                elif neighbor_id in self.nodes[node_id].neighbors:
-                    shortest_path.check_add([neighbor_id])
-
-                row[neighbor_id] = shortest_path
-
-        curr_level_dp: PathsAdjacencyMatrix = {}
-        next_level_dp = adjacency_list
-
-        for level in map(lambda x: ids[x], range(num_nodes)):
-            curr_level_dp = next_level_dp
-            next_level_dp = {}
-
-            for x in map(lambda x: ids[x], range(num_nodes)):
-                row: dict[str, ShortestPaths] = {}
-                next_level_dp[x] = row
-
-                for y in map(lambda x: ids[x], range(num_nodes)):
-                    curr_path = curr_level_dp[x][y]
-                    sum_path = ShortestPaths.unchecked_union(
-                        curr_level_dp[x][level], curr_level_dp[level][y]
-                    )
-                    if len(curr_path) < len(sum_path):
-                        row[y] = curr_path
-                    else:
-                        if len(sum_path) == len(curr_path):
-                            sum_path.unchecked_consume(curr_path)
-                        row[y] = sum_path
-
-        return next_level_dp
-
     def closeness_centrality(self, paths_matrix: PathsAdjacencyMatrix):
         normalization_factor = len(self.nodes) - 1
         for node in self.nodes.values():
-            paths_sum = sum(map(lambda x: len(x), paths_matrix[node.id].values()))
-            node.store["Closeness Centrality"] = normalization_factor / paths_sum
+            paths_sum = sum(
+                map(
+                    lambda x: x.length(default_length=0),
+                    paths_matrix[node.id].values(),
+                )
+            )
+            node.store["Closeness Centrality"] = 0
+            if paths_sum != 0:
+                node.store["Closeness Centrality"] = normalization_factor / paths_sum
 
     def betweenness_centrality(self, paths_matrix: PathsAdjacencyMatrix):
         normalization_factor = ((len(self.nodes) - 1) * (len(self.nodes) - 2)) / 2
@@ -87,6 +51,30 @@ class Graph:
 
                     paths = paths_matrix[s_id][t_id].paths
                     paths_having_node = filter(lambda x: node.id in x, paths)
-                    betweenness += sum(1 for _ in paths_having_node) / len(paths)
+                    if len(paths) > 0:
+                        betweenness += sum(1 for _ in paths_having_node) / len(paths)
 
             node.store["Betweenness Centrality"] = betweenness / normalization_factor
+
+    def degree_prestige(self):
+        normalization_factor = len(self.nodes) - 1
+        for node in self.nodes.values():
+            node.store["Degree Prestige"] = len(node.shadows) / normalization_factor
+
+    def proximity_prestige(self, paths_matrix: PathsAdjacencyMatrix):
+        normalization_factor = len(self.nodes) - 1
+        for node in self.nodes.values():
+            in_path_lengths = list(
+                filter(
+                    lambda x: x != 0,
+                    map(
+                        lambda x: x[node.id].length(default_length=0),
+                        paths_matrix.values(),
+                    ),
+                )
+            )
+
+            node_proximity = 0
+            if len(in_path_lengths) != 0:
+                node_proximity = len(in_path_lengths) ** 2 / sum(in_path_lengths)
+            node.store["Proximity Prestige"] = node_proximity / normalization_factor
