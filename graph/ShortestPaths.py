@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import sys
-
 
 class Path(list[str]):
     def __repr__(self) -> str:
