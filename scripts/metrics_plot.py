@@ -3,5 +3,14 @@ import plotly.express as px
 
 df = pd.read_csv("docs/graph_metrics.csv")
 
-fig = px.scatter(df, x="Node ID", y="Value", size=(df["Value"] + 1) * 5, color="Metric")
+fig = px.scatter(
+    df,
+    title="Graph Metrics - Centrality and Prestige Measures",
+    x="Node ID",
+    y="Value",
+    log_y=True,
+    size=df["Value"] + 1,
+    color="Metric",
+    labels={"Node ID": "Unique ID for Node", "Value": "Centrality or Prestige Metric"},
+)
 fig.show()

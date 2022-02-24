@@ -7,23 +7,41 @@ from tabulate import tabulate
 def main():
     graph = Graph()
 
-    graph.add_node("1")
-    graph.add_node("2")
-    graph.add_node("3")
-    graph.add_node("4")
-    graph.add_node("5")
-    graph.add_node("6")
+    graph.add_node("a")
+    graph.add_node("b")
+    graph.add_node("c")
+    graph.add_node("d")
+    graph.add_node("e")
+    graph.add_node("f")
 
-    graph.nodes["2"].add_neighbour(graph.nodes["1"])
-    graph.nodes["3"].add_neighbour(graph.nodes["1"])
-    graph.nodes["4"].add_neighbour(graph.nodes["3"])
-    graph.nodes["5"].add_neighbour(graph.nodes["3"])
-    graph.nodes["6"].add_neighbour(graph.nodes["3"])
-    graph.nodes["4"].add_neighbour(graph.nodes["5"])
-    graph.nodes["5"].add_neighbour(graph.nodes["6"])
+    graph.nodes["b"].add_neighbour(graph.nodes["a"])
+    graph.nodes["c"].add_neighbour(graph.nodes["a"])
+    graph.nodes["d"].add_neighbour(graph.nodes["c"])
+    graph.nodes["e"].add_neighbour(graph.nodes["c"])
+    graph.nodes["f"].add_neighbour(graph.nodes["c"])
+    graph.nodes["d"].add_neighbour(graph.nodes["e"])
+    graph.nodes["e"].add_neighbour(graph.nodes["f"])
 
     shortest_paths_matrix = floyd_warshall_algorithm(graph)
+
     df = pd.DataFrame(shortest_paths_matrix)
+    print(tabulate(df, headers="keys", tablefmt="fancy_grid"))
+    df.to_csv("docs/shortest_paths_matrix.csv")
+
+    data = []
+    for (from_node_id, shortest_paths_to) in shortest_paths_matrix.items():
+        for (to_node_id, shortest_paths) in shortest_paths_to.items():
+            data.append(
+                {
+                    "From Node": from_node_id,
+                    "To Node": to_node_id,
+                    "Paths": shortest_paths,
+                    "Number of Paths": len(shortest_paths.paths),
+                    "Path Size": shortest_paths.length(),
+                }
+            )
+
+    df = pd.DataFrame(data).set_index(["From Node", "To Node"])
     df.to_csv("docs/shortest_paths.csv")
 
     graph.degree_centrality()
@@ -49,7 +67,9 @@ def main():
         for (metric, value) in node.store.items():
             data.append({"Node ID": node.id, "Metric": metric, "Value": value})
 
-    print(tabulate(table, headers="keys", tablefmt="fancy_grid"))
+    df = pd.DataFrame(table).set_index("Node ID")
+    print(tabulate(df, headers="keys", tablefmt="fancy_grid"))
+    df.to_csv("docs/graph_metrics_table.csv")
 
     df = pd.DataFrame(data).set_index(["Node ID", "Metric"])
     df.to_csv("docs/graph_metrics.csv")

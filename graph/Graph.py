@@ -7,6 +7,8 @@ class Graph:
         self.nodes: dict[str, GraphNode] = {}
 
     def add_node(self, node_id: str):
+        if node_id in self.nodes:
+            raise
         self.nodes[node_id] = GraphNode(node_id)
 
     def connect_nodes(self, a_node_id: str, b_node_id: str):
@@ -27,9 +29,10 @@ class Graph:
                     paths_matrix[node.id].values(),
                 )
             )
-            node.store["Closeness Centrality"] = 0
-            if paths_sum != 0:
+            try:
                 node.store["Closeness Centrality"] = normalization_factor / paths_sum
+            except (ZeroDivisionError):
+                node.store["Closeness Centrality"] = 0
 
     def betweenness_centrality(self, paths_matrix: PathsAdjacencyMatrix):
         normalization_factor = ((len(self.nodes) - 1) * (len(self.nodes) - 2)) / 2
