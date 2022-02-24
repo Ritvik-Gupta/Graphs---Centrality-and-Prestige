@@ -13,9 +13,9 @@ class ShortestPaths:
         self.paths: list[Path] = []
 
     def check_add(self, path: list[str]):
-        if len(self) > len(path):
+        if self.length() > len(path):
             self.paths = [Path(path)]
-        elif len(self) == len(path):
+        elif self.length() == len(path):
             self.paths.append(Path(path))
 
     def unchecked_consume(self, other: ShortestPaths):
@@ -23,9 +23,9 @@ class ShortestPaths:
             if other_path not in self.paths:
                 self.paths.append(other_path)
 
-    def __len__(self) -> int:
+    def length(self, default_length=float("inf")) -> float:
         if len(self.paths) == 0:
-            return sys.maxsize
+            return default_length
         return len(self.paths[0])
 
     def __repr__(self) -> str:
