@@ -12,7 +12,7 @@ fig = px.scatter(
     size=df["Value"] + 1,
     color="Metric",
     symbol="Metric",
-    labels={"Node ID": "Unique ID for Node", "Value": "Centrality or Prestige Metric"},
+    labels={"x": "Unique ID for Node", "y": "Centrality or Prestige Metric"},
     template="plotly_dark",
 )
 fig.show()
@@ -24,7 +24,7 @@ fig = px.bar(
     x="Node ID",
     y="Value",
     color="Metric",
-    labels={"Node ID": "Unique ID for Node", "Value": "Centrality or Prestige Metric"},
+    labels={"x": "Unique ID for Node", "y": "Centrality or Prestige Metric"},
     template="plotly_dark",
 )
 fig.show()

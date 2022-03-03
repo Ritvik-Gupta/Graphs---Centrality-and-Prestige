@@ -16,13 +16,12 @@ fig = px.scatter_3d(
     z="Number of Paths",
     color="Path Size",
     labels={
-        "From Node": "Starting from Node",
-        "To Node": "Ending at Node",
+        "x": "Starting from Node",
+        "y": "Ending at Node",
     },
     color_continuous_scale="Earth",
     template="plotly_dark",
 )
-
 fig.show()
 
 fig = px.density_heatmap(
@@ -33,11 +32,10 @@ fig = px.density_heatmap(
     z="Path Size",
     hover_data=["Number of Paths", "Path Size"],
     labels={
-        "From Node": "Starting from Node",
-        "To Node": "Ending at Node",
+        "x": "Starting from Node",
+        "y": "Ending at Node",
     },
     color_continuous_scale="speed",
     template="plotly_dark",
 )
-
 fig.show()

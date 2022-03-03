@@ -15,9 +15,15 @@ def main():
         input("Enter the Number of Iterations to run the algorithm :\t")
     )
 
-    rank_frames = list(page_rank_algorithm(graph, num_iterations))
+    rank_frames = dict(enumerate(page_rank_algorithm(graph, num_iterations)))
+    print(tabulate(pd.DataFrame(rank_frames), headers="keys", tablefmt="fancy_grid"))
 
-    print(tabulate(rank_frames, headers="keys", tablefmt="fancy_grid"))
+    data = []
+    for (iteration, page_ranks) in rank_frames.items():
+        for (node_id, rank) in page_ranks.items():
+            data.append({"Iteration": iteration, "Node ID": node_id, "Page Rank": rank})
+    df = pd.DataFrame(data)
+    df.to_csv("docs/page_rank.csv")
 
 
 if __name__ == "__main__":

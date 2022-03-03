@@ -3,7 +3,7 @@ from __future__ import annotations
 
 class Path(list[str]):
     def __repr__(self) -> str:
-        return f"<{'-'.join(self)}>"
+        return f"*{''.join(self)}"
 
 
 class ShortestPaths:
