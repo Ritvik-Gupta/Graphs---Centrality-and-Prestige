@@ -36,3 +36,6 @@ class ShortestPaths:
             for path_b in sp_b.paths:
                 shortest_path.paths.append(Path([*path_a, *path_b]))
         return shortest_path
+
+
+PathsAdjacencyMatrix = dict[str, dict[str, ShortestPaths]]

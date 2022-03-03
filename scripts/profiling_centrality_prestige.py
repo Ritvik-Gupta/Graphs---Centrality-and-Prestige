@@ -6,9 +6,11 @@ from utils.graph_parser import parse_file_for_graph
 
 def main():
     print("Name :                   Ritvik Gupta")
-    print("Registration Number :    19BCE0397", end="\n\n")
+    print("Registration Number :    19BCE0397")
+    print("Experiment :             Centrality and Prestige", end="\n\n")
 
-    graph = parse_file_for_graph(input("Enter a Filename for Graph:\t"))
+    graph_filename = input("Enter the Filename for a Graph in `graph_notations` :\t")
+    graph = parse_file_for_graph(f"./graph_notations/{graph_filename}.txt")
 
     shortest_paths_matrix = floyd_warshall_algorithm(graph)
 
@@ -44,7 +46,7 @@ def main():
         table.append(
             {
                 "Node ID": node.id,
-                "Neighbors": list(node.neighbors.keys()),
+                "Neighbors": list(node.out_links.keys()),
                 "Degree Centrality": node.store["Degree Centrality"],
                 "Closeness Centrality": node.store["Closeness Centrality"],
                 "Betweenness Centrality": node.store["Betweenness Centrality"],

@@ -1,11 +1,11 @@
 import re
 
-from graph.graph import Graph
+from graph.graph_network import GraphNetwork
 
 
-def parse_file_for_graph(filename: str) -> Graph:
+def parse_file_for_graph(filename: str) -> GraphNetwork:
     with open(filename) as file:
-        graph = Graph()
+        graph = GraphNetwork()
         line = file.readline()
 
         if len(line) == 0:
@@ -13,7 +13,7 @@ def parse_file_for_graph(filename: str) -> Graph:
 
         node_ids = line.split()
         for node_id in node_ids:
-            if re.match(r"^[a-zA-Z]+$", node_id) is None:
+            if re.match(r"^[a-zA-Z1-9]+$", node_id) is None:
                 raise Exception()
             graph.add_node(node_id)
 

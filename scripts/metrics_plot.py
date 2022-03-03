@@ -38,6 +38,7 @@ fig = px.scatter_polar(
     df,
     title="Graph Metrics - Centrality and Prestige Measures",
     r=1 / df["Betweenness Centrality"],
+    log_r=True,
     size="Betweenness Centrality",
     theta=df["Proximity Prestige"] * 360 / max_proximity,
     color="Node ID",

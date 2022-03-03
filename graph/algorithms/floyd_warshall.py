@@ -1,12 +1,8 @@
-from graph.shortest_paths import ShortestPaths
-
-PathsAdjacencyMatrix = dict[str, dict[str, ShortestPaths]]
-
-
-from graph.graph import Graph
+from graph.graph_network import GraphNetwork
+from graph.shortest_paths import PathsAdjacencyMatrix, ShortestPaths
 
 
-def floyd_warshall_algorithm(graph: Graph):
+def floyd_warshall_algorithm(graph: GraphNetwork):
     ids = list(graph.nodes.keys())
     num_nodes = len(graph.nodes)
     adjacency_list: PathsAdjacencyMatrix = {}
@@ -19,7 +15,7 @@ def floyd_warshall_algorithm(graph: Graph):
             shortest_path = ShortestPaths()
             if node_id == neighbor_id:
                 shortest_path.check_add([])
-            elif neighbor_id in graph.nodes[node_id].neighbors:
+            elif neighbor_id in graph.nodes[node_id].out_links:
                 shortest_path.check_add([neighbor_id])
 
             row[neighbor_id] = shortest_path

@@ -1,9 +1,9 @@
-from graph.algorithms.floyd_warshall import PathsAdjacencyMatrix
+from graph.shortest_paths import PathsAdjacencyMatrix
 from graph.errors import NodesWithSameID, NoSuchNodeWithID
 from graph.graph_node import GraphNode
 
 
-class Graph:
+class GraphNetwork:
     def __init__(self):
         self.nodes: dict[str, GraphNode] = {}
 
@@ -24,7 +24,7 @@ class Graph:
     def degree_centrality(self):
         normalization_factor = len(self.nodes) - 1
         for node in self.nodes.values():
-            node.store["Degree Centrality"] = len(node.neighbors) / normalization_factor
+            node.store["Degree Centrality"] = len(node.out_links) / normalization_factor
 
     def closeness_centrality(self, paths_matrix: PathsAdjacencyMatrix):
         normalization_factor = len(self.nodes) - 1
@@ -62,7 +62,7 @@ class Graph:
     def degree_prestige(self):
         normalization_factor = len(self.nodes) - 1
         for node in self.nodes.values():
-            node.store["Degree Prestige"] = len(node.shadows) / normalization_factor
+            node.store["Degree Prestige"] = len(node.in_links) / normalization_factor
 
     def proximity_prestige(self, paths_matrix: PathsAdjacencyMatrix):
         normalization_factor = len(self.nodes) - 1
