@@ -18,6 +18,8 @@ def _create_filtered_graph(graph: GraphNetwork) -> GraphNetwork:
             else:
                 node.add_neighbour(neighbor)
 
+    if len(filtered_graph.nodes) != len(graph.nodes):
+        return _create_filtered_graph(filtered_graph)
     return filtered_graph
 
 
