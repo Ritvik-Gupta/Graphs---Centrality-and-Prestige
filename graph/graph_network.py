@@ -58,9 +58,8 @@ class GraphNetwork:
             try:
                 node.store["Closeness Centrality"] = normalization_factor / paths_sum
             except (ZeroDivisionError):
-                node.store[
-                    "Closeness Centrality"
-                ] = 0  # If No Path exists just assume 0
+                # If No Path exists just assume 0
+                node.store["Closeness Centrality"] = 0
 
     """
     Takes the Shortest Paths Matrix computed to easily calculate
