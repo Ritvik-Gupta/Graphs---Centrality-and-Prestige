@@ -10,7 +10,7 @@ def main():
     print("Experiment :             Page Rank", end="\n\n")
 
     graph_filename = input("Enter the Filename for a Graph in `graph_notations` :\t")
-    graph = parse_file_for_graph(f"./graph_notations/{graph_filename}.txt")
+    graph = parse_file_for_graph(graph_filename)
     num_iterations = int(
         input("Enter the Number of Iterations to run the algorithm :\t")
     )

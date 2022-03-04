@@ -10,14 +10,17 @@ def main():
     print("Experiment :             Centrality and Prestige", end="\n\n")
 
     graph_filename = input("Enter the Filename for a Graph in `graph_notations` :\t")
-    graph = parse_file_for_graph(f"./graph_notations/{graph_filename}.txt")
+    graph = parse_file_for_graph(graph_filename)
 
+    # Compute First the Adjacency Matrix for Shortest Paths to use later
     shortest_paths_matrix = floyd_warshall_algorithm(graph)
 
+    # Display the Shortest Paths Adjacency Matrix
     df = pd.DataFrame(shortest_paths_matrix)
     print(tabulate(df, headers="keys", tablefmt="fancy_grid"))
     df.to_csv("docs/shortest_paths_matrix.csv")
 
+    # For Plotting its easier to compute on known columns with headers
     data = []
     for (from_node_id, shortest_paths_to) in shortest_paths_matrix.items():
         for (to_node_id, shortest_paths) in shortest_paths_to.items():
@@ -34,12 +37,14 @@ def main():
     df = pd.DataFrame(data).set_index(["From Node", "To Node"])
     df.to_csv("docs/shortest_paths.csv")
 
+    # Apply all the Algorithms and results will be stored in each Node
     graph.degree_centrality()
     graph.closeness_centrality(shortest_paths_matrix)
     graph.betweenness_centrality(shortest_paths_matrix)
     graph.degree_prestige()
     graph.proximity_prestige(shortest_paths_matrix)
 
+    # To Display in a Table format the values for Centrality and Proximity for each Node
     table = []
     data = []
     for node in graph.nodes.values():
@@ -57,6 +62,7 @@ def main():
         for (metric, value) in node.store.items():
             data.append({"Node ID": node.id, "Metric": metric, "Value": value})
 
+    # Display the Centrality and Proximity Table
     df = pd.DataFrame(table).set_index("Node ID")
     print(tabulate(df, headers="keys", tablefmt="fancy_grid"))
     df.to_csv("docs/graph_metrics_table.csv")
